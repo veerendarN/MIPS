@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DNN8ModelStoreContainer" CdmEntityContainer="DNN8Entities">
+    <EntitySetMapping Name="tbl_Lookup_QPP_Measure_Type">
+      <EntityTypeMapping TypeName="DNN8Model.tbl_Lookup_QPP_Measure_Type">
+        <MappingFragment StoreEntitySet="tbl_Lookup_QPP_Measure_Type">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="QPP_Measure_Type_Code" ColumnName="QPP_Measure_Type_Code" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_Lookup_QPP_Modality">
+      <EntityTypeMapping TypeName="DNN8Model.tbl_Lookup_QPP_Modality">
+        <MappingFragment StoreEntitySet="tbl_Lookup_QPP_Modality">
+          <ScalarProperty Name="Modality" ColumnName="Modality" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_Lookup_Registry">
+      <EntityTypeMapping TypeName="DNN8Model.tbl_Lookup_Registry">
+        <MappingFragment StoreEntitySet="tbl_Lookup_Registry">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_Lookup_Specialty">
+      <EntityTypeMapping TypeName="DNN8Model.tbl_Lookup_Specialty">
+        <MappingFragment StoreEntitySet="tbl_Lookup_Specialty">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_Measure_To_QPP_Modality">
+      <EntityTypeMapping TypeName="DNN8Model.tbl_Measure_To_QPP_Modality">
+        <MappingFragment StoreEntitySet="tbl_Measure_To_QPP_Modality">
+          <ScalarProperty Name="CMS_Year" ColumnName="CMS_Year" />
+          <ScalarProperty Name="Modality_Id" ColumnName="Modality_Id" />
+          <ScalarProperty Name="Measure_Num" ColumnName="Measure_Num" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tbl_Lookup_QPP_Measures">
+      <EntityTypeMapping TypeName="DNN8Model.tbl_Lookup_QPP_Measures">
+        <MappingFragment StoreEntitySet="tbl_Lookup_QPP_Measures">
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="CMS_Year" ColumnName="CMS_Year" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="Reporting_Method" ColumnName="Reporting_Method" />
+          <ScalarProperty Name="Registry" ColumnName="Registry" />
+          <ScalarProperty Name="Specialty" ColumnName="Specialty" />
+          <ScalarProperty Name="Cross_Cutting" ColumnName="Cross_Cutting" />
+          <ScalarProperty Name="Domain" ColumnName="Domain" />
+          <ScalarProperty Name="Measure_Priority" ColumnName="Measure_Priority" />
+          <ScalarProperty Name="Measure_Type_Modifier" ColumnName="Measure_Type_Modifier" />
+          <ScalarProperty Name="Measure_Type_Code" ColumnName="Measure_Type_Code" />
+          <ScalarProperty Name="Measure_Description" ColumnName="Measure_Description" />
+          <ScalarProperty Name="Measure_Title" ColumnName="Measure_Title" />
+          <ScalarProperty Name="Measure_Num" ColumnName="Measure_Num" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_QPPMeasures_With_Modality">
+      <EntityTypeMapping TypeName="DNN8Model.vw_QPPMeasures_With_Modality">
+        <MappingFragment StoreEntitySet="vw_QPPMeasures_With_Modality">
+          <ScalarProperty Name="Message_Desc" ColumnName="Message_Desc" />
+          <ScalarProperty Name="Modality" ColumnName="Modality" />
+          <ScalarProperty Name="specialty_Desc" ColumnName="specialty_Desc" />
+          <ScalarProperty Name="MeasureType_Desc" ColumnName="MeasureType_Desc" />
+          <ScalarProperty Name="CMS_Year" ColumnName="CMS_Year" />
+          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
+          <ScalarProperty Name="Reporting_Method" ColumnName="Reporting_Method" />
+          <ScalarProperty Name="Registry" ColumnName="Registry" />
+          <ScalarProperty Name="Specialty" ColumnName="Specialty" />
+          <ScalarProperty Name="Cross_Cutting" ColumnName="Cross_Cutting" />
+          <ScalarProperty Name="Domain" ColumnName="Domain" />
+          <ScalarProperty Name="Measure_Priority" ColumnName="Measure_Priority" />
+          <ScalarProperty Name="Measure_Type_Modifier" ColumnName="Measure_Type_Modifier" />
+          <ScalarProperty Name="Measure_Type_Code" ColumnName="Measure_Type_Code" />
+          <ScalarProperty Name="Measure_Description" ColumnName="Measure_Description" />
+          <ScalarProperty Name="Measure_Title" ColumnName="Measure_Title" />
+          <ScalarProperty Name="Measure_Num" ColumnName="Measure_Num" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

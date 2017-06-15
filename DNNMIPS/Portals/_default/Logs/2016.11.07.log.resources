@@ -1,0 +1,11 @@
+2016-11-07 18:00:34,009 [MWEB-ASD3DUC057][Thread:12][FATAL] DotNetNuke.Web.Common.Internal.DotNetNukeHttpApplication - System.IO.FileNotFoundException: Could not find file 'C:\inetpub\Sample\App_Data\_imagecache\D8D698DDAE249938E359F722CE4D6EEE38F130D1.tmp'.
+File name: 'C:\inetpub\Sample\App_Data\_imagecache\D8D698DDAE249938E359F722CE4D6EEE38F130D1.tmp'
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share)
+   at System.Web.HttpResponse.TransmitFile(String filename, Int64 offset, Int64 length)
+   at System.Web.HttpResponseWrapper.TransmitFile(String filename)
+   at DotNetNuke.Services.GeneratedImage.DiskImageStore.TryTransmitIfContains(String id, HttpResponseBase response)
+   at DotNetNuke.Services.GeneratedImage.ImageHandlerInternal.HandleImageRequest(HttpContextBase context, Func`2 imageGenCallback, String uniqueIdStringSeed)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)

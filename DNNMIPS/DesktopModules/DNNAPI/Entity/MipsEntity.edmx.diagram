@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6c1571ba544d4fb79b6b5f6a191a0747" Name="Diagram1" >
+        <EntityTypeShape EntityType="DNN8Model.tbl_Lookup_QPP_Measure_Type" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DNN8Model.tbl_Lookup_QPP_Modality" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DNN8Model.tbl_Lookup_Registry" Width="2.125" PointX="0.875" PointY="3.625" />
+        <EntityTypeShape EntityType="DNN8Model.tbl_Lookup_Specialty" Width="2.75" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="DNN8Model.tbl_Measure_To_QPP_Modality" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DNN8Model.tbl_Lookup_QPP_Measures" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="DNN8Model.vw_QPPMeasures_With_Modality" Width="1.5" PointX="4.375" PointY="3.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

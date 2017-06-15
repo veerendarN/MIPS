@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DNN8Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="DNN8Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tbl_Lookup_QPP_Measure_Type" EntityType="DNN8Model.tbl_Lookup_QPP_Measure_Type" />
+    <EntitySet Name="tbl_Lookup_QPP_Modality" EntityType="DNN8Model.tbl_Lookup_QPP_Modality" />
+    <EntitySet Name="tbl_Lookup_Registry" EntityType="DNN8Model.tbl_Lookup_Registry" />
+    <EntitySet Name="tbl_Lookup_Specialty" EntityType="DNN8Model.tbl_Lookup_Specialty" />
+    <EntitySet Name="tbl_Measure_To_QPP_Modality" EntityType="DNN8Model.tbl_Measure_To_QPP_Modality" />
+    <EntitySet Name="tbl_Lookup_QPP_Measures" EntityType="DNN8Model.tbl_Lookup_QPP_Measures" />
+    <EntitySet Name="vw_QPPMeasures_With_Modality" EntityType="DNN8Model.vw_QPPMeasures_With_Modality" />
+  </EntityContainer>
+  <EntityType Name="tbl_Lookup_QPP_Measure_Type">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="QPP_Measure_Type_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tbl_Lookup_QPP_Modality">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Modality" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tbl_Lookup_Registry">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tbl_Lookup_Specialty">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tbl_Measure_To_QPP_Modality">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Measure_Num" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Modality_Id" Type="Int32" />
+    <Property Name="CMS_Year" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tbl_Lookup_QPP_Measures">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Measure_Num" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Title" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Type_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Type_Modifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Priority" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Domain" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="Cross_Cutting" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Specialty" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="Registry" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Reporting_Method" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <Property Name="CMS_Year" Type="Int32" />
+    <Property Name="Message" Type="String" MaxLength="2500" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="vw_QPPMeasures_With_Modality">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Specialty" />
+      <PropertyRef Name="Registry" />
+      <PropertyRef Name="MeasureType_Desc" />
+      <PropertyRef Name="specialty_Desc" />
+      <PropertyRef Name="Modality" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Measure_Num" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Title" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Type_Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Type_Modifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Measure_Priority" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Domain" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="Cross_Cutting" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Specialty" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="Registry" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Reporting_Method" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="DisplayOrder" Type="Int32" />
+    <Property Name="CMS_Year" Type="Int32" />
+    <Property Name="MeasureType_Desc" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="specialty_Desc" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Modality" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Message_Desc" Type="String" MaxLength="2500" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>

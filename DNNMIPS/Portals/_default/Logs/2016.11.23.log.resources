@@ -1,0 +1,3 @@
+2016-11-23 13:38:32,464 [MWEB-AB-ROPA][Thread:19][ERROR] Dnn.Modules.SkinManagement.EditSkins - System.Runtime.InteropServices.ExternalException (0x80004005): A generic error occurred in GDI+.
+   at System.Drawing.Image.Save(String filename, ImageCodecInfo encoder, EncoderParameters encoderParams)
+   at Dnn.Modules.SkinManagement.EditSkins.CreateThumbnail(String strImage)

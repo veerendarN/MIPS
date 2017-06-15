@@ -1,0 +1,10 @@
+2016-11-04 16:18:50,733 [MWEB-ASD3DUC057][Thread:7][ERROR] DotNetNuke.Services.Exceptions.Exceptions - FriendlyMessage="An error has occurred." ctrl="ASP.desktopmodules_ddrmenu_menu_ascx" exc="System.ApplicationException: Couldn't load menu style 'Menus/MainMenu': System.InvalidOperationException: Stack empty.
+   at System.ThrowHelper.ThrowInvalidOperationException(ExceptionResource resource)
+   at System.Collections.Generic.Stack`1.Pop()
+   at DotNetNuke.Web.DDRMenu.TemplateEngine.TokenTemplateProcessor.LoadDefinition(TemplateDefinition baseDefinition)
+   at DotNetNuke.Web.DDRMenu.TemplateEngine.TemplateDefinition.FromManifest(String manifestUrl)
+   at DotNetNuke.Web.DDRMenu.MenuBase.Instantiate(String menuStyle)
+   at DotNetNuke.Web.DDRMenu.MenuBase.Instantiate(String menuStyle)
+   at DotNetNuke.Web.DDRMenu.SkinObject.OnPreRender(EventArgs e)"
+2016-11-04 16:18:50,850 [MWEB-ASD3DUC057][Thread:7][ERROR] DotNetNuke.Services.Exceptions.Exceptions - FriendlyMessage="An error has occurred." ctrl="ASP.desktopmodules_ddrmenu_menu_ascx" exc="System.NullReferenceException: Object reference not set to an instance of an object.
+   at DotNetNuke.Web.DDRMenu.SkinObject.Render(HtmlTextWriter writer)"
