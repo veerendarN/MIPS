@@ -612,7 +612,7 @@
                     TBP: Total_Bonus_Point,
                     SM: strSelectedMeasures
                 };
-            var str = '/DesktopModules/DNNAPI/API/RoleSubScription/ExportToExcel?' + $.param(obj);
+            var str = ServerUrl + '/api/mips/ExportToExcel?' + $.param(obj);
             window.open(str, '_self');
         }
         else {
