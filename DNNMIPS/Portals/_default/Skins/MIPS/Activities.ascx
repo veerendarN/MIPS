@@ -1,3 +1,4 @@
+<%@ Import Namespace="System.Configuration" %>
 <%@ Control Language="vb" AutoEventWireup="false" Explicit="True" Inherits="DotNetNuke.UI.Skins.Skin" %>
 <%@ Register TagPrefix="dnn" TagName="STYLES" Src="~/Admin/Skins/Styles.ascx" %>
 <%@ Register TagPrefix="dnn" TagName="CURRENTDATE" Src="~/Admin/Skins/CurrentDate.ascx" %>
@@ -136,10 +137,6 @@
     
 </div>
 <div class="modal"><!-- Place at bottom of page --></div>
-<!-- /.SiteWrapper -->
-
-<%-- CSS & JS includes --%>
-<!--#include file="Common/AddFiles.ascx"-->
 
 <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 <%--<script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>--%>
@@ -160,15 +157,14 @@
 <script src="<%#SkinPath %>/Js/multiselect/jquery.multiselect.filter.js" type="text/javascript"></script>
 
 
-<script type="text/javascript">       
-    var speciality = '',
-           modality = '',
-           registry = '',
-           measures = '',
+
+
+
+<script type="text/javascript">     
+    var Activity = '',         
            selectedMeasures = [],
-           selectedModality = [],
-           selectedRegistry = [],
-           selectedSpecialty = [],
+           selectedActivity = [],
+           selectedWeight = [],
            Addremove = [],
            ServerUrl = "http://localhost:82";
 
@@ -192,69 +188,23 @@
         return false;
     });
 
-    $(document).ready(function () {
-        //$body = $("body");
-
-        //$(document).on({
-        //    ajaxStart: function () { $body.addClass("loading"); },
-        //    ajaxStop: function () { $body.removeClass("loading"); }
-        //});
-        $('input[name="accordion-1"]').on("change", function (event) {
-            var Id = this.attributes.id.value,
-                Ischecked = this.checked;
-            switch (Id) {
-                case "ac-1":
-                    if (Ischecked && $('#Speciality').children().length == 0)
-                        bindcheckboxes(speciality, 'Speciality');
-                    break;
-                case "ac-2":
-                    if (Ischecked && $('#Modality').children().length == 0)
-                        bindcheckboxes(modality, 'Modality');
-                    break;
-                case "ac-3":
-                    if (Ischecked && $('#Registry').children().length == 0)
-                        bindcheckboxes(registry, 'Registry');
-                    break;
-                case "ac-4":
-                    if (Ischecked && $('#Measures').children().length == 0)
-                        bindcheckboxes(measures, 'Measures');
-                    break;
-                default:
-            }
-        });
-        
-        //Call getAllMeasures() in onload.
-        getAllMeasures();
-
-
+    $(document).ready(function () {       
+       
+        GetAllActivitiesList();
         $.ajax({
 
-			url: ServerUrl + "/api/mips/GetAllLookUpsData",
+            url: ServerUrl + "/api/mips/GetActivities",
             type: "GET",
             dataType: 'json',
-            success: function (response) {
-
-                var items = '';
-                var arr = ["Specialty", "Modality", "Registry", "Measure Type"];
-
-                $.each(response, function (i, v) {
-                    if (i == 0) {
-                        speciality = v;
-                    }
-                    else if (i == 1) {
-                        modality = v;
-                    }
-                    else if (i == 2) {
-                        registry = v;
-                    }
-                    else {
-                        measures = v;
-                    }
-                });
+            success: function (data) {
+                var html = '';
+                for (var i = 0; i < data.length; i++) {
+                    html += '<div><label><div style="float: left; margin-right: 2px;"><input type="checkbox" category="Activity" id="' + data[i].Id + '" onclick="MeasureTypes(this,event)" /></div>' + data[i].SubcategoryName + '</label></div>';
+                }
+                $('#Activity').empty().append(html);
                 $('input[name="accordion-1"]').trigger('click');
             },
             error: function (xhr, ajaxOptions, thrownError) {
-
                 console.log(xhr.responseText);
             }
         })
@@ -276,27 +226,6 @@
         });
         //End
     });
-
-    function bindcheckboxes(data,measurename) {
-        var html = '';
-        for (var i = 0; i <data.length; i++) {
-            html += '<div><label><div style="float: left; margin-right: 2px;"><input type="checkbox" measurename="' + measurename + '" id="' + data[i].replace(/ /g, '-') + '" onclick="MeasureTypes(this,event)" /></div>' + data[i] + '</label></div>';
-        }
-        measurename = measurename.toUpperCase();
-        if (measurename == "Speciality".toUpperCase()) {
-            $('#Speciality').empty().append(html);
-        }
-        else if (measurename == "Modality".toUpperCase()) {
-            $('#Modality').empty().append(html);
-        }
-        else if (measurename == "Registry".toUpperCase()) {
-            $('#Registry').empty().append(html);
-        }
-        else {
-            $('#Measures').empty().append(html);
-        }
-    }   
-
     function removemeasure(ctrl) {
         $('.buttonBlock').find(':checkbox[id=' + $(ctrl).parent().data("id") + ']').trigger('click');
         if ($('.buttonBlock').find(':checkbox[id=' + $(ctrl).parent().data("id") + ']').length == 0) {
@@ -321,7 +250,7 @@
     }
 
     function deleteMeasure(data) {
-        var checkboxID = $(data).parent().find('label').text().replace(/ /g,'-');
+        var checkboxID = $(data).parent().attr('id');
         $('input[type="checkbox"][id="' + checkboxID + '"]').trigger('click');        
         data.parentElement.remove();
     }
@@ -340,39 +269,30 @@
 
     function MeasureTypes(Ctrl, event, ui) {
 	    $('#divBelowBonusPoint').html('');
-	    var checkBoxValue = Ctrl.attributes.id.value.replace(/-/g, ' ');
-	    Ctrl.attributes.measurename.value = Ctrl.attributes.measurename.value.toString().toUpperCase();
-	    if (Ctrl.attributes.measurename.value== "Modality".toUpperCase()) {
-	        selectedModality= bindingSelectedvalues(selectedModality, checkBoxValue, Ctrl.checked);	       
+	    var checkBoxValue = Ctrl.attributes.id.value,
+	        category = Ctrl.attributes.category.value.toUpperCase();
+	    if (category == "Activity".toUpperCase()) {
+	        selectedActivity = bindingSelectedvalues(selectedActivity, checkBoxValue, Ctrl.checked);
         }
-	    if (Ctrl.attributes.measurename.value== "Speciality".toUpperCase()) {
-	        selectedSpecialty= bindingSelectedvalues(selectedSpecialty, checkBoxValue, Ctrl.checked);           
-        }
-	    if (Ctrl.attributes.measurename.value == "Registry".toUpperCase()) {
-	        selectedRegistry = bindingSelectedvalues(selectedRegistry, checkBoxValue, Ctrl.checked);
-        }
-	    if (Ctrl.attributes.measurename.value== "Measures".toUpperCase()) {
-	        selectedMeasures= bindingSelectedvalues(selectedMeasures, checkBoxValue, Ctrl.checked);            
+	    if (category == "Weighing".toUpperCase()) {
+	        selectedWeight = bindingSelectedvalues(selectedWeight, checkBoxValue, Ctrl.checked);
         }
         if (Ctrl.checked) {
-            $("#selectedMeasures").append('<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding" id="' + checkBoxValue.replace(/ /g, '-') + '"><label>' + checkBoxValue + '</label><button class="btn btn-danger pull-right btn-xs" type="button" onclick="deleteMeasure(this)">X</button>');
+            $("#selectedMeasures").append('<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding" id="' + checkBoxValue + '"><label>' + $(Ctrl).closest('label').text() + '</label><button class="btn btn-danger pull-right btn-xs" type="button" onclick="deleteMeasure(this)">X</button>');
         }
         else {
             $('#'+checkBoxValue.replace(/ /g, '-')).remove();
         }
-        getSelectedMeasuresWithModality(selectedMeasures.toString(), selectedModality.toString(), selectedRegistry.toString(), selectedSpecialty.toString());
+        getFilteredActivities(selectedActivity.toString(), selectedWeight.toString());
         
     }
 
     function ClearAll() {
             $('.chkBoxes').children().find(":checkbox:checked").attr("checked", false);
             $('#selectedMeasures').children().remove();
-            getAllMeasures();
+            GetAllActivitiesList();
             $('#clear').attr("disabled", true);
-            selectedMeasures = [];
-            selectedModality = [];
-            selectedRegistry = [];
-            selectedSpecialty = [];
+            selectedActivity = []; selectedWeight=[];
     }
 
     function ResetTotal() {
@@ -380,26 +300,29 @@
         $('#lblTotalOutComes,#lblTotalPrioritys,#lblTotalMeasures,#divBonusPoint').text('');
     }
 
-    function getSelectedMeasuresWithModality(checkedcheckboxvalue, chkModality, chkRegistry, chkSpecialty)
+    function getFilteredActivities(chkActivity, chkWeight)
     {
         //gblselectedMeasuresCount = 0;
-        if ((checkedcheckboxvalue == "") && (chkModality == "") && (chkRegistry == "") && (chkSpecialty == "")) {
+        if ((chkActivity == "") && (chkWeight == "")) {
             $('.buttonBlock').html('');
             $('#divBonusPoint').html('');
             $('#divAboveBonusPoint').html('');
             ResetTotal();
             $('#ShowTotal').find('p b').text('Total Measures meeting criteria : ' + 0);
-            alert("No measures found.");
+            alert("No Activity Found.");
             $('#clear').attr("disabled", "disabled");
-            getAllMeasures();
+            GetAllActivitiesList();
         }
         else {
-
+            var obj = {
+                Sc: chkActivity,
+                Wt: chkWeight
+            };
             $.ajax({
 
-                url: ServerUrl + "/api/mips/GetSelectionMeasures",
+                url: ServerUrl + "/api/mips/GetActivitiesList",
                 type: "GET",
-                data: { strMeasureType: checkedcheckboxvalue, strModality: chkModality, strRegistry: chkRegistry, strSpecialty: chkSpecialty },
+                data: obj,
                 dataType: 'json',
                 success: function (data) {
                     if ((data != null) && (data.length) && (data != "")) {
@@ -408,17 +331,26 @@
                         ShowTotal(data.length);
                         $.each(data, function (key, value)
                         {
-                            var MeasureURL = (value.Measure_URL != null && value.Measure_URL != "") ? "<a class='measureurl-style' href=" + value.Measure_URL + " target='_blank' <p><strong>" + value.MeasureNumber + "</strong>-" + value.MeasureTitle + "</p></a>" :
-                           "<p><strong>" + value.MeasureNumber + "</strong>-" + value.MeasureTitle + "</p>";
-                            var Message2 = (value.Message2 != null && value.Message2 != "") ? "<p>" + value.Message2 + "</p>" : "";
-                            //$('.buttonBlock').append("<div class='div-border col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'><div class='col-xs-12 col-sm-10 col-md-10 col-lg-10 no-padding'><p><strong>" + value.MeasureNumber + "</strong>-" + value.MeasureTitle + "</p><p><em>High Priority (Patient Safety), Outcome</em></p></div><div class='col-xs-12 col-sm-2 col-md-2 col-lg-2 no-padding text-right'><label class='switch'><input class='switch-input' type='checkbox' /> <span class='switch-label' data-on='On' data-off='Off'></span><span class='switch-handle'></span> </label></div></div>");
-                            var x = "<div class='div-border col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'>";                         
-                            x = x + "<div class='col-xs-12 col-sm-10 col-md-10 col-lg-10 no-padding measureData'>" + MeasureURL + "<p><em>" + value.messageDesc + "</p>" + Message2 + "</div>";
-                            x = x + "<div class='col-xs-12 col-sm-2 col-md-2 col-lg-2 no-padding text-right'><label class='switch'>";                          
-                            x = x + "<input class='switch-input' id='" + value.MeasureNumber.replace(/ /g, '_') + "'type='checkbox' onclick='TotalMeasures(this);'/>  <div class='slider'></div>";
-                            x = x + "<input type='hidden' id='hdntypecode" + value.MeasureNumber.replace(/ /g, '_') + "' value='" + value.measureTypeCode + "' />";
-                            x = x + "<input type='hidden' id='hdnpriority" + value.MeasureNumber.replace(/ /g, '_') + "' value='" + value.measure_priority + "' />";
-                            x = x + "</label></div></div>";
+                            var x = "<div class='div-border mydiv col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'>";
+                            x = x + "<div class='col-xs-12 col-sm-10 col-md-10 col-lg-10 no-padding measureData'><p>" + value.ActivityName + "</p><p><em>" + value.Description + "</em></p></div>";
+                            x = x + "<div class='col-xs-12 col-sm-2 col-md-2 col-lg-2 no-padding text-right'><label class='switch'>";
+                            x = x + "<input class='switch-input' id='" + value.ActivityID + "'type='checkbox' onclick='TotalMeasures(this);'/>  <div class='slider'></div>";
+                            //x = x + "<input type='hidden' id='hdntypecode" + value.MeasureNumber.replace(/ /g, '_')+"' value='" + value.measureTypeCode + "' />";
+                            //x = x + "<input type='hidden' id='hdnpriority" + value.MeasureNumber.replace(/ /g, '_') +"' value='" + value.measure_priority + "' />";
+                            x = x + "</label><a href='#' style='color:green' class='myanchor' onclick='return readmoreclick(this)'>read more...</a></div></div>";
+                            x = x + "<div style='display:none' class='actdiv div-border col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'><div class='row'>";
+                            x = x + "<div class='innerACR'>";
+                            x = x + '<div class="row row-eq-height no-padding box-shadow margin0"> <div class="col-xs-12 col-sm-4 col-md-4"> <div class="media-body"> <h3>Activity ID</h3> <p>' + value.ActivityID + '</p> </div> </div> <div class="col-xs-12 col-sm-4 col-md-4"> <div class="media-body"> <h3>Subcategory Name </h3> <p>' + value.SubcategoryName + '</p> </div> </div> <div class="col-xs-12 col-sm-4 col-md-4"> <div class="media-body"> <h3>Activity Weighing</h3> <p>' + value.Weighing + '</p> </div> </div> </div>';
+                            x = x + "<section class='ac-container'>";
+                            var result = Math.floor(1000 + Math.random() * 9000);
+                            x = x + "<div><input id='acr-" + result + "' type='checkbox' /> <label class='mLabel' for='acr-" + result + "'>Description</label><article class='ac-xs'><div class='chkBoxes' id='Description'>" + value.ActivityDescription + "</div></article></div>";
+                            var result1 = Math.floor(1000 + Math.random() * 9000);
+                            x = x + "<div><input id='acr-" + result1 + "' type='checkbox' /> <label class='mLabel' for='acr-" + result1 + "'>Validation</label><article class='ac-sm'><div class='chkBoxes' id='Validation'>" + value.Validations + "</div></article></div>";
+                            var result2 = Math.floor(1000 + Math.random() * 9000);
+                            x = x + '<div><input id="acr-' + result2 + '" type="checkbox" /> <label class="mLabel" for="acr-' + result2 + '">CMS Suggested Documentations</label><article class="ac-lg"><div class="chkBoxes" id="Cmssd">' + value.CMSsuggesteddocuments + '</div></article></div>';
+                            var result3 = Math.floor(1000 + Math.random() * 9000);
+                            x = x + '<div><input id="acr-' + result3 + '" type="checkbox" /> <label class="mLabel" for="acr-' + result3 + '">ACR Suggested Activities</label><article class="ac-smlst"><div class="chkBoxes" id="ACRsa">' + value.ACRsuggesteddocuments + '</div></article></div>';
+                            x = x + '</section></div></div></div>';
                             $('.buttonBlock').append(x);
                         });
                         $.each(Addremove, function (index, value) {
@@ -430,7 +362,7 @@
                     else {
                         $('#divAboveBonusPoint,#divBelowBonusPoint,.buttonBlock').html('');
                         $('#ShowTotal').find('p b').text('Total Measures meeting criteria : ' + 0);                       
-                        alert("No measures found.");
+                        alert("No Activity Found.");
                     }
                     CalculateMeasures();                    
                 },
@@ -440,18 +372,19 @@
         }
     }
 
-    $('#getAllMeasures').click(function () {
+    $('#getAllActivities').click(function () {
         ClearAll();
-        getAllMeasuresWithModality();
+        GetAllActivitiesList();
         setTimeout(function () {
             $('#clear').attr("disabled", "disabled")},500);
     });
 
-    function getAllMeasures()
-    {
-        getAllMeasuresWithModality();
-    }
+    function readmoreclick(ctrl) {
+        $('.actdiv:visible').hide();
+        $(ctrl).parents('.mydiv').next('.actdiv').show();
+        return false;
 
+    }
     function CalculateMeasures() {
         var highPriority = ($('.addedmeasures').find(':hidden[value="!!"]').length + $('.addedmeasures').find(':hidden[value="!"]').length),
             totalOutcome = $('.addedmeasures').find(':hidden[value="OC"]').length,
@@ -468,10 +401,10 @@
         }
     }
 
-    function getAllMeasuresWithModality() {
+    function GetAllActivitiesList() {
         $.ajax({
 
-            url: ServerUrl + "/api/mips/GetAllMeasures",
+            url: ServerUrl + "/api/mips/GetAllActivitiesList",
             type: "GET",
             dataType: 'json',
             success: function (data) {
@@ -481,16 +414,26 @@
                     $('#divAboveBonusPoint,#divBelowBonusPoint,.buttonBlock').html('');
                     ShowTotal(data.length);
                     $.each(data, function (key, value) {
-                        var MeasureURL = (value.Measure_URL != null && value.Measure_URL != "") ? "<a class='measureurl-style' href=" + value.Measure_URL + " target='_blank' <p><strong>" + value.MeasureNumber + "</strong>-" + value.MeasureTitle + "</p></a>" :
-                            "<p><strong>" + value.MeasureNumber + "</strong>-" + value.MeasureTitle + "</p>";
-                        var Message2 = (value.Message2 != null && value.Message2 != "") ? "<p>" + value.Message2 + "</p>" : "";
-                        var x = "<div class='div-border col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'>";                       
-                        x = x + "<div class='col-xs-12 col-sm-10 col-md-10 col-lg-10 no-padding measureData'>" + MeasureURL + "<p><em>" + value.MeasureTypeDesc + "</p>" + Message2 + "</div>";
+                        var x = "<div class='div-border mydiv col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'>";
+                        x = x + "<div class='col-xs-12 col-sm-10 col-md-10 col-lg-10 no-padding measureData'><p>" + value.ActivityName + "</p><p><em>" + value.Description + "</em></p></div>";
                         x = x + "<div class='col-xs-12 col-sm-2 col-md-2 col-lg-2 no-padding text-right'><label class='switch'>";
-                        x = x + "<input class='switch-input' id='" + value.MeasureNumber.replace(/ /g, '_') + "'type='checkbox' onclick='TotalMeasures(this);'/>  <div class='slider'></div>";
-                        x = x + "<input type='hidden' id='hdntypecode" + value.MeasureNumber.replace(/ /g, '_')+"' value='" + value.measureTypeCode + "' />";
-                        x = x + "<input type='hidden' id='hdnpriority" + value.MeasureNumber.replace(/ /g, '_') +"' value='" + value.measure_priority + "' />";
-                        x= x+ "</label></div></div>";
+                        x = x + "<input class='switch-input' id='" + value.ActivityID + "'type='checkbox' onclick='TotalMeasures(this);'/>  <div class='slider'></div>";
+                        //x = x + "<input type='hidden' id='hdntypecode" + value.MeasureNumber.replace(/ /g, '_')+"' value='" + value.measureTypeCode + "' />";
+                        //x = x + "<input type='hidden' id='hdnpriority" + value.MeasureNumber.replace(/ /g, '_') +"' value='" + value.measure_priority + "' />";
+                        x = x + "</label><a href='#' style='color:green' class='myanchor' onclick='return readmoreclick(this)'>read more...</a></div></div>";
+                        x = x + "<div style='display:none' class='actdiv div-border col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'><div class='row'>";
+                        x = x + "<div class='innerACR'>";
+                        x = x + '<div class="row row-eq-height no-padding box-shadow margin0"> <div class="col-xs-12 col-sm-4 col-md-4"> <div class="media-body"> <h3>Activity ID</h3> <p>' + value.ActivityID + '</p> </div> </div> <div class="col-xs-12 col-sm-4 col-md-4"> <div class="media-body"> <h3>Subcategory Name </h3> <p>' + value.SubcategoryName + '</p> </div> </div> <div class="col-xs-12 col-sm-4 col-md-4"> <div class="media-body"> <h3>Activity Weighing</h3> <p>' + value.Weighing + '</p> </div> </div> </div>';
+                        x = x + "<section class='ac-container'>";
+                        var result = GetRandomNumber(4);
+                        x = x + "<div><input id='acr-" + result + "' type='checkbox' /> <label class='mLabel' for='acr-" + result + "'>Description</label><article class='ac-xs'><div class='chkBoxes' id='Description'>" + value.ActivityDescription + "</div></article></div>";
+                        var result1 = GetRandomNumber(4);
+                        x = x + "<div><input id='acr-" + result1 + "' type='checkbox' /> <label class='mLabel' for='acr-" + result1 + "'>Validation</label><article class='ac-sm'><div class='chkBoxes' id='Validation'>" + value.Validations + "</div></article></div>";
+                        var result2 = GetRandomNumber(4);
+                        x = x + '<div><input id="acr-' + result2 + '" type="checkbox" /> <label class="mLabel" for="acr-' + result2 + '">CMS Suggested Documentations</label><article class="ac-lg"><div class="chkBoxes" id="Cmssd">' + value.CMSsuggesteddocuments + '</div></article></div>';
+                        var result3 = GetRandomNumber(4);
+                        x = x + '<div><input id="acr-' + result3 + '" type="checkbox" /> <label class="mLabel" for="acr-' + result3 + '">ACR Suggested Activities</label><article class="ac-smlst"><div class="chkBoxes" id="ACRsa">' + value.ACRsuggesteddocuments + '</div></article></div>';
+                        x = x + '</section></div></div></div>';
                         $('.buttonBlock').append(x);
                     });
                     $.each(Addremove, function (index, value) {
@@ -503,6 +446,11 @@
         });
 
     }
+
+    function GetRandomNumber(length) {
+
+        return ("" + Math.random()).substr(2, length);
+    };
 
     function ShowTotal(count)
     {
@@ -559,9 +507,11 @@
         location.href = "/Calculator2";     
     });
     
-    $('#divImprovement').click(function (event) {
+    $('#divImprovement').click(function () {
         location.href = "/Improvements";       
     });
+
+   
 
     $('#divAdvancing').click(function () {
 
@@ -608,7 +558,7 @@
             $('#divBelowBonusPoint').html('');
             if (gblselectedMeasuresCount == 0 && value!=1)
             {
-                alert('No Measure Selected.');
+                alert('No Activity Selected.');
             }
            
         }
@@ -644,7 +594,7 @@
 
 
     }
-
+    
     $('#getDownload').click(function () {
         var arr = [];
 
@@ -662,13 +612,11 @@
                     TBP: Total_Bonus_Point,
                     SM: strSelectedMeasures
                 };
-            var str = ServerUrl + '/api/mips/ExportToExcel?' + $.param(obj);
+            var str = '/DesktopModules/DNNAPI/API/RoleSubScription/ExportToExcel?' + $.param(obj);
             window.open(str, '_self');
         }
         else {
             alert("Please select atleast one item.");
         }
-
     });
-
 </script>
