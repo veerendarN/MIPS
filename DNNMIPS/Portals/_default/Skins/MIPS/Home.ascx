@@ -169,8 +169,7 @@
            selectedModality = [],
            selectedRegistry = [],
            selectedSpecialty = [],
-           Addremove = [],
-           ServerUrl = "http://localhost:82";
+           Addremove = [];
 
     var gblselectedMeasuresCount = 0;
     var gblselectedOutcomeCoumt = 0;
@@ -229,7 +228,7 @@
 
         $.ajax({
 
-			url: ServerUrl + "/api/mips/GetAllLookUpsData",
+            url: "/DesktopModules/DNNAPI/API/RoleSubScription/GetAllLookUpsData",
             type: "GET",
             dataType: 'json',
             success: function (response) {
@@ -397,7 +396,7 @@
 
             $.ajax({
 
-                url: ServerUrl + "/api/mips/GetSelectionMeasures",
+                url: "/DesktopModules/DNNAPI/API/RoleSubScription/GetSelectionMeasures",
                 type: "GET",
                 data: { strMeasureType: checkedcheckboxvalue, strModality: chkModality, strRegistry: chkRegistry, strSpecialty: chkSpecialty },
                 dataType: 'json',
@@ -471,7 +470,7 @@
     function getAllMeasuresWithModality() {
         $.ajax({
 
-            url: ServerUrl + "/api/mips/GetAllMeasures",
+            url: "/DesktopModules/DNNAPI/API/RoleSubScription/GetAllMeasures",
             type: "GET",
             dataType: 'json',
             success: function (data) {
@@ -662,7 +661,7 @@
                     TBP: Total_Bonus_Point,
                     SM: strSelectedMeasures
                 };
-            var str = ServerUrl + '/api/mips/ExportToExcel?' + $.param(obj);
+            var str = '/DesktopModules/DNNAPI/API/RoleSubScription/ExportToExcel?' + $.param(obj);
             window.open(str, '_self');
         }
         else {

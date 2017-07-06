@@ -192,8 +192,8 @@
        
         GetAllActivitiesList();
         $.ajax({
-
-            url: ServerUrl + "/api/mips/GetActivities",
+            url: "/DesktopModules/DNNAPI/API/RoleSubScription/GetActivities",
+            //url: ServerUrl + "/api/mips/GetActivities",
             type: "GET",
             dataType: 'json',
             success: function (data) {
@@ -320,7 +320,8 @@
             };
             $.ajax({
 
-                url: ServerUrl + "/api/mips/GetActivitiesList",
+                url: "/DesktopModules/DNNAPI/API/RoleSubScription/GetActivitiesList",
+//                url: ServerUrl + "/api/mips/GetActivitiesList",
                 type: "GET",
                 data: obj,
                 dataType: 'json',
@@ -332,11 +333,10 @@
                         $.each(data, function (key, value)
                         {
                             var x = "<div class='div-border mydiv col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'>";
-                            x = x + "<div class='col-xs-12 col-sm-10 col-md-10 col-lg-10 no-padding measureData'><p>" + value.ActivityName + "</p><p><em>" + value.Description + "</em></p></div>";
+                            x = x + "<div class='col-xs-12 col-sm-10 col-md-10 col-lg-10 no-padding measureData'><p>" + value.ActivityName + "</p><p><em>" + value.Message + "</em></p></div>";
                             x = x + "<div class='col-xs-12 col-sm-2 col-md-2 col-lg-2 no-padding text-right'><label class='switch'>";
                             x = x + "<input class='switch-input' id='" + value.ActivityID + "'type='checkbox' onclick='TotalMeasures(this);'/>  <div class='slider'></div>";
-                            //x = x + "<input type='hidden' id='hdntypecode" + value.MeasureNumber.replace(/ /g, '_')+"' value='" + value.measureTypeCode + "' />";
-                            //x = x + "<input type='hidden' id='hdnpriority" + value.MeasureNumber.replace(/ /g, '_') +"' value='" + value.measure_priority + "' />";
+                            x = x + "<input type='hidden' id='" + value.ActivityID + "' value='" + value.Weighing + "' />";
                             x = x + "</label><a href='#' style='color:green' class='myanchor' onclick='return readmoreclick(this)'>read more...</a></div></div>";
                             x = x + "<div style='display:none' class='actdiv div-border col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'><div class='row'>";
                             x = x + "<div class='innerACR'>";
@@ -386,25 +386,22 @@
 
     }
     function CalculateMeasures() {
-        var highPriority = ($('.addedmeasures').find(':hidden[value="!!"]').length + $('.addedmeasures').find(':hidden[value="!"]').length),
-            totalOutcome = $('.addedmeasures').find(':hidden[value="OC"]').length,
-            totalMeasures = Addremove.length;
+        debugger;
+        var Mediumweight = $('.addedmeasures').find(':hidden[value="Medium"]').length,
+            Highweight = $('.addedmeasures').find(':hidden[value="High"]').length,
+            totalcount = Mediumweight + Highweight;
         $('.alert-success').text("").text(Addremove.length + " Measures Added");
-        $('#lblTotalOutComes').text(totalOutcome>0?totalOutcome:"");
-        $('#lblTotalMeasures').text(totalMeasures>0?totalMeasures:"");
-        $('#lblTotalPrioritys').text(highPriority>0?highPriority:"");
-        if (totalMeasures<6) {
-            $('#lblTotalMeasures').addClass('lblTotalMeasuresClass');
-        }
-        else {
-            $('#lblTotalMeasures').removeClass('lblTotalMeasuresClass').addClass('lblGreen');
-        }
+        $('#lblMediumweight').text(Mediumweight > 0 ? Mediumweight : "");
+        $('#lbltotalcount').text(totalcount > 0 ? totalcount : "");
+        $('#lblHighweight').text(Highweight > 0 ? Highweight : "");
+        
     }
 
     function GetAllActivitiesList() {
         $.ajax({
 
-            url: ServerUrl + "/api/mips/GetAllActivitiesList",
+            url: "/DesktopModules/DNNAPI/API/RoleSubScription/GetAllActivitiesList",
+//            url: ServerUrl + "/api/mips/GetAllActivitiesList",
             type: "GET",
             dataType: 'json',
             success: function (data) {
@@ -415,11 +412,10 @@
                     ShowTotal(data.length);
                     $.each(data, function (key, value) {
                         var x = "<div class='div-border mydiv col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'>";
-                        x = x + "<div class='col-xs-12 col-sm-10 col-md-10 col-lg-10 no-padding measureData'><p>" + value.ActivityName + "</p><p><em>" + value.Description + "</em></p></div>";
+                        x = x + "<div class='col-xs-12 col-sm-10 col-md-10 col-lg-10 no-padding measureData'><p>" + value.ActivityName + "</p><p><em>" + value.Message + "</em></p></div>";
                         x = x + "<div class='col-xs-12 col-sm-2 col-md-2 col-lg-2 no-padding text-right'><label class='switch'>";
                         x = x + "<input class='switch-input' id='" + value.ActivityID + "'type='checkbox' onclick='TotalMeasures(this);'/>  <div class='slider'></div>";
-                        //x = x + "<input type='hidden' id='hdntypecode" + value.MeasureNumber.replace(/ /g, '_')+"' value='" + value.measureTypeCode + "' />";
-                        //x = x + "<input type='hidden' id='hdnpriority" + value.MeasureNumber.replace(/ /g, '_') +"' value='" + value.measure_priority + "' />";
+                        x = x + "<input type='hidden' id='" + value.ActivityID + "' value='" + value.Weighing + "' />";
                         x = x + "</label><a href='#' style='color:green' class='myanchor' onclick='return readmoreclick(this)'>read more...</a></div></div>";
                         x = x + "<div style='display:none' class='actdiv div-border col-xs-12 col-sm-12 col-md-12 col-lg-12 paddingTB10 marginBot10'><div class='row'>";
                         x = x + "<div class='innerACR'>";
@@ -477,7 +473,7 @@
             }
             $('.addedmeasures').find("[data-id='" + Ctrl.attributes.id.value + "']").remove();
             var addedMeasure = $(Ctrl).parents().children().closest('.measureData').find('p').eq(0).text() == "" ? $(Ctrl).parents().children().closest('.measureData').find('a').text() : $(Ctrl).parents().children().closest('.measureData').find('p').eq(0).text();
-            var html = "<div class='measure-item' data-id='" + Ctrl.attributes.id.value + "'><p>" + addedMeasure + "</p><button type='button' class='js-remove-self remove-self' onclick=removemeasure(this)></button><input type=hidden value='" + $(Ctrl).parent().find('input[type="hidden"]').last().val() + "'/><input type=hidden value='" + $(Ctrl).parent().find('input[type="hidden"]').first().val() + "'/></div>";
+            var html = "<div class='measure-item' data-id='" + Ctrl.attributes.id.value + "'><p>" + addedMeasure + "</p><button type='button' class='js-remove-self remove-self' onclick=removemeasure(this)></button><input type=hidden id='" + Ctrl.attributes.id.value + "'  value='" + $(Ctrl).parent().find('input[type="hidden"]').last().val() + "'/></div>";
             $('.addedmeasures').append(html);
             
 
@@ -527,7 +523,7 @@
 
     $('.btnDone').click(function () {
         
-        calculateBonus();
+        //calculateBonus();
 
     });
     
@@ -600,19 +596,19 @@
 
         if (Addremove.length > 0) {
             for (var i = 0; i < Addremove.length; ++i) {
-                arr.push(Addremove[i].replace("_", " "));
+                arr.push(Addremove[i].replace(/_/g, " "));
             }
             var strSelectedMeasures = arr.join(",");
-            calculateBonus(1);
+            //calculateBonus(1);
             var obj =
                 {
-                    MC: gblselectedMeasuresCount,
-                    OC: gblselectedOutcomeCoumt,
-                    PC: gblselectedPriorityCount,
-                    TBP: Total_Bonus_Point,
+                    HWC: gblselectedMeasuresCount,
+                    MWC: gblselectedOutcomeCoumt,
+                    TMC: gblselectedPriorityCount,
+                    TBP: 1,
                     SM: strSelectedMeasures
                 };
-            var str = ServerUrl + '/api/mips/ExportToExcel?' + $.param(obj);
+            var str = '/DesktopModules/DNNAPI/API/RoleSubScription/ExportToExcelActivities?' + $.param(obj);
             window.open(str, '_self');
         }
         else {

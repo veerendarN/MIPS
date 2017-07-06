@@ -1124,7 +1124,7 @@ outline:none !important;
     display:block;
     margin-bottom:10px
 }
-/* Start by setting display:none to make this hidden.
+ /* Start by setting display:none to make this hidden.
    Then we position it in relation to the viewport window
    with position:fixed. Width, height, top and left speak
    for themselves. Background we set to 80% white with
@@ -1138,7 +1138,7 @@ outline:none !important;
     height:     100%;
     width:      100%;
     background: rgba( 255, 255, 255, .8 ) 
-                url('https://i.stack.imgur.com/FhHRx.gif') 
+                url('http://i.stack.imgur.com/FhHRx.gif') 
                 50% 50% 
                 no-repeat;
 }
@@ -1154,6 +1154,7 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+
 .myanchor {
     display: block;
     font-size: 11px;
